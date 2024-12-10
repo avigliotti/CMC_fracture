@@ -114,26 +114,6 @@ function getϕ(F::Matrix{D}, d::U, ∇d::Vector{U},
 
   ψ + mat.Gc/2mat.l0*γ
 end
-function getϕ!(F::Matrix{D}, d::U, ∇d::Vector{U},
-              mat::PhaseField{M} where M,
-              ϕmax::Number) where {D,U}
-
-  I1, I1sq  = get1stinvariants(F, mat.mat)
-  ν, Es     = mat.mat.ν, mat.mat.E
-  λ         = Es*ν/(1+ν)/(1-2ν) 
-  μ         = Es/2/(1+ν) 
-
-  γ = d + mat.l0^2*(∇d⋅∇d)
-  ψ = if I1≥0
-    ϕmax = max(λ/2*I1^2 + μ*I1sq, ϕmax)
-    (1-d)^2*ϕmax
-  else
-    ϕmax = max(μ*I1sq, ϕmax)
-    λ/2*I1^2 + (1-d)^2*ϕmax
-  end
-
-  ψ + mat.Gc/2mat.l0*γ, ϕmax
-end
 # 
 function get1stinvariants(F::Array{N,2} where N<:Number, mat::Hooke)
 
